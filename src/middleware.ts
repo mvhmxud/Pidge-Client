@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRefreshToken } from "./utils/getRefreshToken";
-import { isTokenExpired } from "./utils/isTokenExpired";
+import { getRefreshToken } from "./lib/utils/getRefreshToken";
+import { isTokenExpired } from "./lib/utils/isTokenExpired";
 
 export default async function middleware(req: NextRequest) {
+  console.log("Middleware");
   const session = req.cookies.get("token");
   const refreshToken = req.cookies.get("refreshToken");
   if (!refreshToken) return;
