@@ -1,16 +1,24 @@
-import React from 'react'
-import Image from 'next/image'
-// turn this to a navbar component  
-const UserProfile = (user: any) => {
-  const fallbackImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-PAu_EBlXK17AdNV7eUqDiefAPP86amtE9Q&s'
+import React from "react";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User } from "lucide-react";
+// turn this to a navbar component
+const UserProfile = React.memo((user: any) => {
   return (
-    <div className="flex flex-col items-center">
-      <Image className="rounded-full" src={user.image || fallbackImage} alt="user" width={100} height={100} />
-      <h1>{user.username}</h1>
+    <div className="flex flex-col items-center text-white">
+      <Avatar className="w-24 h-24">
+        <AvatarImage  src={user.image} />
+        <AvatarFallback>
+          <User />
+        </AvatarFallback>
+      </Avatar>
+
+      <h1>Welcome {user.username}</h1>
       <h2>{user.name}</h2>
-      <h3>{user.userId}</h3>
+      <h3> {user.userId}</h3>
+      <h4> {user.bio}</h4>
     </div>
   );
-};
+});
 
-export default UserProfile
+export default UserProfile;
