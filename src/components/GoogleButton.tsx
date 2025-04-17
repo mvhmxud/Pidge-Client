@@ -1,5 +1,4 @@
 "use client";
-import React, { Suspense, useEffect } from "react";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { redirect } from "next/navigation";
 
@@ -28,12 +27,14 @@ const GoogleAuth = ({ text }: GoogleAuthProps) => {
   return (
     <GoogleLogin
       theme="filled_black"
-      locale="en"
-      shape="square"
+      locale="en-US"
       text={text}
       onSuccess={onSuccessHandler}
       onError={onErrorHandler}
-    />
+      size="large"
+      logo_alignment="left"
+      width="100%"
+      />
   );
 };
 

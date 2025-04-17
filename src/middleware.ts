@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRefreshToken } from "./lib/utils/getRefreshToken";
-import { isTokenExpired } from "./lib/utils/isTokenExpired";
+// import { isTokenExpired } from "./lib/utils/isTokenExpired";
 
 export default async function middleware(req: NextRequest) {
-  console.log("Middleware");
-  const session = req.cookies.get("token");
+  console.log("AuthMiddleware ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅");
+
+  // const session = req.cookies.get("token");
   const refreshToken = req.cookies.get("refreshToken");
   if (!refreshToken) return;
-  const isExpired = session?.value ? await isTokenExpired(session.value) : true;
-  if (!session || isExpired) {
+  // const isExpired = session?.value ? await isTokenExpired(session.value) : true;
     try {
       const { token, refreshToken: newRefreshToken } = await getRefreshToken(
         refreshToken.value
@@ -28,9 +28,9 @@ export default async function middleware(req: NextRequest) {
     } catch (error) {
       console.log(error);
     }
-  }
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
+

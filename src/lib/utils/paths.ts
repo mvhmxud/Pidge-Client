@@ -1,6 +1,8 @@
 
 export const paths = {
   home: "/",
-  login: "/login",
+  login: "/sign-in",
   register: "/register",
+  onboarding: "/onboarding",
+  chat: "/chat",
 };

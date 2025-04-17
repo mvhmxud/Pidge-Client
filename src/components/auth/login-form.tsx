@@ -55,7 +55,6 @@ export function LoginForm({
       toast.success("Login successful, redirecting...", {
         duration: 2000,
       });
-      setUser(res.data.user);
       router.push("/");
     },
     onError: (err: AxiosError<{ message: string }>) => {
@@ -135,13 +134,15 @@ export function LoginForm({
                   )}
                 </Button>
                 <hr />
-                <GoogleAuth text="continue_with" />
+                <GoogleAuth text="signin_with" />
               </div>
             </form>
           </Form>
+          <p className="text-sm text-center mt-2">
+            Don't have an account? <Link className="hover:underline" href={paths.register}>Sign up</Link>
+          </p>
         </CardContent>
       </Card>
     </div>
   );
 }
-// make reusable form component
