@@ -12,11 +12,11 @@ interface CustomModalProps {
 
 const CustomModal = ({ trigger, title, children, className }: CustomModalProps) => {
   return (
-    <Dialog>
+    <Dialog >
       <DialogTrigger asChild>
         {trigger}
       </DialogTrigger>
-      <DialogContent className={cn("sm:max-w-[425px]", className)}>
+      <DialogContent  aria-describedby={undefined}  className={cn("sm:max-w-[425px]", className)}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
