@@ -76,7 +76,7 @@ export function FriendsList({
                       <Avatar className="h-8 w-8 md:h-10 md:w-10 border border-zinc-700 bg-zinc-800">
                         <AvatarImage src={friend.image} />
                         <AvatarFallback className="capitalize text-xl md:text-2xl">
-                          {friend.name.charAt(0)}
+                          {friend.name[0]}
                         </AvatarFallback>
                       </Avatar>
                       <span className="text-sm md:text-base text-zinc-400">

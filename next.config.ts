@@ -3,7 +3,18 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ['lh3.googleusercontent.com', 'encrypted-tbn0.gstatic.com' , 'res.cloudinary.com'],
+    domains: [
+      "lh3.googleusercontent.com",
+      "res.cloudinary.com",
+      "randomuser.me",
+    ],
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
+    return config;
   },
 };
 

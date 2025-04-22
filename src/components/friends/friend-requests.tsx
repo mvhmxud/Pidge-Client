@@ -53,7 +53,7 @@ export function FriendRequests({
                   <div className="flex items-center gap-2 md:gap-3">
                     <Avatar className="h-8 w-8 md:h-10 md:w-10 border border-zinc-700 bg-zinc-800">
                       <AvatarImage src={request.image} />
-                      <AvatarFallback className="capitalize text-xl md:text-2xl">{request.name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback className="capitalize text-xl md:text-2xl">{request.username.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <span className="text-sm md:text-base text-zinc-400">{request.name}</span>
                   </div>

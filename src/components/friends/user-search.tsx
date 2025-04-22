@@ -1,20 +1,23 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Send } from "lucide-react";
 import { toast } from "sonner";
 import type { User } from "@/types/types";
 import { UseMutateAsyncFunction } from "@tanstack/react-query";
-import { Spinner } from "../ui/spinner";
+import { Spinner } from "@/components/ui/spinner";
 import useDebounce from "@/hooks/useDebounce";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface UsersSearchProps {
   searchHandler: UseMutateAsyncFunction<any, Error, string, unknown>;
   isLoading: boolean;
   sendFriendRequest: (id: string) => Promise<void>;
 }
+
 type SearchUsers = Omit<User, "isActive" | "lastActive" | "_v">;
-const UserSearch: React.FC<UsersSearchProps> = ({
+
+const SearchUsers: React.FC<UsersSearchProps> = ({
   searchHandler,
   isLoading,
   sendFriendRequest,
@@ -77,14 +80,25 @@ const UserSearch: React.FC<UsersSearchProps> = ({
           </div>
         )}
         {!isLoading &&
-          users?.map((user) => (
+          users &&
+          users.map((user) => (
             <div
               key={user._id}
               className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent transition-colors"
             >
-              <div className="space-y-1">
-                <h4 className="text-sm font-medium">{user.name}</h4>
-                <p className="text-sm text-muted-foreground">{user.username}</p>
+              <div className="flex items-center space-x-3">
+                <Avatar>
+                  <AvatarImage src={user.image} alt={user.name} />
+                  <AvatarFallback>
+                    {user.username.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="space-y-1">
+                  <h4 className="text-sm font-medium">{user.name}</h4>
+                  <p className="text-sm text-muted-foreground">
+                    {user.username}
+                  </p>
+                </div>
               </div>
               <Button
                 variant="outline"
@@ -96,7 +110,7 @@ const UserSearch: React.FC<UsersSearchProps> = ({
               </Button>
             </div>
           ))}
-        {!isLoading && !searchTerm && (
+        {!isLoading && !users.length && !searchTerm && (
           <p className="text-center text-sm text-muted-foreground py-4">
             Search for a user to add as a friend
           </p>
@@ -111,4 +125,4 @@ const UserSearch: React.FC<UsersSearchProps> = ({
   );
 };
 
-export default UserSearch;
+export default SearchUsers;
