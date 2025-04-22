@@ -26,6 +26,7 @@ const page = async () => {
         )}
       </div>
       <Link href={paths.onboarding}>Onboarding</Link>
+      <Link href={paths.friends}>Friends</Link>
     </div>
   );
 };
