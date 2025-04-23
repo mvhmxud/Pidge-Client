@@ -203,22 +203,6 @@ export function AppSidebar({ isCollapsed }: { isCollapsed: boolean }) {
                         isActive={user.isActive}
                         size={!isCollapsed ? "md" : "sm"}
                       />
-                      {/* <div className="relative">
-                        <Avatar
-                          title={isCollapsed ? user.name : ""}
-                          className="dark:border-zinc-600 border-[0.5px]"
-                        >
-                          <AvatarImage
-                            loading="lazy"
-                            src={user.image || "/placeholder.svg"}
-                            alt={user.name}
-                          />
-                          <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        {user.isActive && (
-                          <Badge className="absolute -bottom-1 -right-1 w-3 h-3 p-0 bg-green-500 border-2 border-accent hover:bg-green-500 rounded-full" />
-                        )}
-                      </div> */}
                       {!isCollapsed && (
                         <div className="flex flex-col flex-1 min-w-0 cursor-pointer">
                           <div className="flex justify-between items-center w-full">
