@@ -7,7 +7,6 @@ export const metadata: Metadata = {
   title: "Subz Chat",
   description: "Connect and chat with your friends in real-time using Subz Chat.",
 };
-
 const page = () => {
   return (
     <SidebarProvider>

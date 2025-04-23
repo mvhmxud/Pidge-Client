@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { AppSidebar } from "./SideBar";
-import { SidebarProvider, useSidebar } from "../ui/sidebar";
-import { Menu } from "lucide-react";
+import { useSidebar } from "../ui/sidebar";
+
 import ChatComponent from "./ChatComponent";
 
 const ChatLayout = () => {

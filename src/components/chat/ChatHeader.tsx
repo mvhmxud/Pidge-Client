@@ -14,7 +14,7 @@ const ChatHeader = ({ user }: ChatHeaderProps) => {
   const { setOpenMobile } = useSidebar();
 
   return (
-    <div className="p-4 w-full border-b bg-sidebar flex justify-between items-center min-h-[76px] shadow-sm">
+    <div className="p-4 w-full border-b bg-sidebar flex justify-between items-center h-20 shadow-sm">
       {/* Left section: Avatar + Details */}
       <div className="flex items-center gap-4">
         <Avatar

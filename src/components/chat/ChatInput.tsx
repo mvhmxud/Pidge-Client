@@ -25,7 +25,7 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="p-4 w-full text-center border-b-1 bg-sidebar ">
+    <div className="p-4 w-full text-center border-b-1 bg-sidebar  ">
       <div className="flex items-center max-w-full">
         <Form {...form}>
           <form
