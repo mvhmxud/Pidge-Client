@@ -7,7 +7,7 @@ import type { User } from "@/types/types";
 import { UseMutateAsyncFunction } from "@tanstack/react-query";
 import { Spinner } from "@/components/ui/spinner";
 import useDebounce from "@/hooks/useDebounce";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import Avatar from "../Common/Avatar";
 
 interface UsersSearchProps {
   searchHandler: UseMutateAsyncFunction<any, Error, string, unknown>;
@@ -87,12 +87,12 @@ const SearchUsers: React.FC<UsersSearchProps> = ({
               className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent transition-colors"
             >
               <div className="flex items-center space-x-3">
-                <Avatar>
-                  <AvatarImage src={user.image} alt={user.name} />
-                  <AvatarFallback>
-                    {user.username.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <Avatar
+                  alt={user.name}
+                  fallback={user.username}
+                  imageUrl={user.image}
+                  size="sm"
+                />
                 <div className="space-y-1">
                   <h4 className="text-sm font-medium">{user.name}</h4>
                   <p className="text-sm text-muted-foreground">

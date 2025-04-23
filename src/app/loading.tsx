@@ -3,7 +3,7 @@ import React from 'react'
 
 const loading = () => {
   return (
-    <div className='w-full h-full flex items-center justify-center h-screen'>
+    <div className='w-full flex items-center justify-center h-screen'>
         <Spinner size='large' />
     </div>
   )
