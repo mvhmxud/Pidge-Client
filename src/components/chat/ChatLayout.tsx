@@ -6,12 +6,12 @@ import { Menu } from "lucide-react";
 import ChatComponent from "./ChatComponent";
 
 const ChatLayout = () => {
-  const { state, openMobile, setOpenMobile, toggleSidebar } = useSidebar();
+  const { state, openMobile } = useSidebar();
 
   const isCollapsed = state === "collapsed";
 
   return (
-    <div className="h-screen w-screen flex dark:bg-background">
+    <div className="w-screen max-h-svh flex dark:bg-background">
       {/* SideBar */}
       <div className={`hidden md:block`}>
         <AppSidebar isCollapsed={isCollapsed} />

@@ -1,6 +1,5 @@
 import { Settings, Users } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -14,14 +13,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import Link from "next/link";
+import Avatar from "../Common/Avatar";
 // Sample user data
 const users = [
   {
@@ -170,9 +169,7 @@ const currentUser = {
 
 export function AppSidebar({ isCollapsed }: { isCollapsed: boolean }) {
   return (
-    <Sidebar
-      collapsible="icon"
-    >
+    <Sidebar collapsible="icon">
       <SidebarHeader className="flex items-center justify-between p-4 border-b ">
         <div className="flex items-center gap-2">
           <SidebarTrigger />
@@ -199,12 +196,20 @@ export function AppSidebar({ isCollapsed }: { isCollapsed: boolean }) {
                     } h-auto`}
                   >
                     <div>
-                      <div className="relative">
+                      <Avatar
+                        alt={user.name}
+                        fallback={user.username}
+                        imageUrl={user.image}
+                        isActive={user.isActive}
+                        size={!isCollapsed ? "md" : "sm"}
+                      />
+                      {/* <div className="relative">
                         <Avatar
                           title={isCollapsed ? user.name : ""}
                           className="dark:border-zinc-600 border-[0.5px]"
                         >
                           <AvatarImage
+                            loading="lazy"
                             src={user.image || "/placeholder.svg"}
                             alt={user.name}
                           />
@@ -213,7 +218,7 @@ export function AppSidebar({ isCollapsed }: { isCollapsed: boolean }) {
                         {user.isActive && (
                           <Badge className="absolute -bottom-1 -right-1 w-3 h-3 p-0 bg-green-500 border-2 border-accent hover:bg-green-500 rounded-full" />
                         )}
-                      </div>
+                      </div> */}
                       {!isCollapsed && (
                         <div className="flex flex-col flex-1 min-w-0 cursor-pointer">
                           <div className="flex justify-between items-center w-full">
@@ -251,10 +256,12 @@ export function AppSidebar({ isCollapsed }: { isCollapsed: boolean }) {
           <div className="flex flex-col items-center gap-3">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Avatar>
-                  <AvatarImage src={currentUser.image || "/placeholder.svg"} alt="Your profile" />
-                  <AvatarFallback>YN</AvatarFallback>
-                </Avatar>
+                <Avatar
+                  alt={currentUser.name}
+                  fallback={currentUser.username}
+                  imageUrl={currentUser.image}
+                  size="sm"
+                />
               </TooltipTrigger>
               <TooltipContent side="right">
                 <p>{currentUser.username}</p>
@@ -264,10 +271,10 @@ export function AppSidebar({ isCollapsed }: { isCollapsed: boolean }) {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button variant="ghost" size="icon" asChild>
-                    <a href="/friends">
+                    <Link href="/friends">
                       <Users className="h-5 w-5" />
                       <span className="sr-only">Friends</span>
-                    </a>
+                    </Link>
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="right">Friends</TooltipContent>
@@ -275,10 +282,10 @@ export function AppSidebar({ isCollapsed }: { isCollapsed: boolean }) {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button variant="ghost" size="icon" asChild>
-                    <a href="/settings">
+                    <Link href="/settings">
                       <Settings className="h-5 w-5" />
                       <span className="sr-only">Settings</span>
-                    </a>
+                    </Link>
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="right">Settings</TooltipContent>
@@ -288,32 +295,43 @@ export function AppSidebar({ isCollapsed }: { isCollapsed: boolean }) {
         ) : (
           <div className="flex items-center justify-between transition-opacity duration-200">
             <div className="flex items-center gap-3">
-              <Avatar>
-                <AvatarImage src={currentUser.image || "/placeholder.svg"} alt="Your profile" />
-                <AvatarFallback>YN</AvatarFallback>
-              </Avatar>
-              <span className="font-medium">{currentUser.username}</span>
+              <Avatar
+                alt={currentUser.name}
+                fallback={currentUser.username}
+                imageUrl={currentUser.image}
+                // size="md"
+              />
+              <span className="font-medium text-sm">
+                {currentUser.username}
+              </span>
             </div>
-            <div className="flex gap-1 opacity-100 transition-opacity duration-200">
+            <div className="flex opacity-100 transition-opacity duration-200">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button variant="ghost" size="icon" asChild>
-                    <a href="/friends">
+                    <Link href="/friends">
                       <Users className="h-5 w-5" />
                       <span className="sr-only">Friends</span>
-                    </a>
+                    </Link>
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Friends List</p>
+                  <p>Friends</p>
                 </TooltipContent>
               </Tooltip>
-              <Button variant="ghost" size="icon" asChild>
-                <a href="/settings">
-                  <Settings className="h-5 w-5" />
-                  <span className="sr-only">Settings</span>
-                </a>
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" asChild>
+                    <Link href="/settings">
+                      <Settings className="h-5 w-5" />
+                      <span className="sr-only">Settings</span>
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>settings</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         )}

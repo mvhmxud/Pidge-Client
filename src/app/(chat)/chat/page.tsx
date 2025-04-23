@@ -1,12 +1,18 @@
 import ChatLayout from "@/components/chat/ChatLayout";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Subz Chat",
+  description: "Connect and chat with your friends in real-time using Subz Chat.",
+};
 
 const page = () => {
   return (
-    <SidebarProvider >
-    <ChatLayout/>
-  </SidebarProvider>
+    <SidebarProvider>
+      <ChatLayout />
+    </SidebarProvider>
   );
 };
 

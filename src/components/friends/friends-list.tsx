@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MessageSquare, Search, Trash2, UserPlus } from "lucide-react";
@@ -10,6 +9,7 @@ import type { User } from "@/types/types";
 import CustomModal from "../Modal";
 import UserSearch from "./user-search";
 import { UseMutationResult } from "@tanstack/react-query";
+import Avatar from "../Common/Avatar";
 
 interface FriendsListProps {
   friends: User[];
@@ -24,7 +24,7 @@ export function FriendsList({
   onRemoveFriend,
   isLoading,
   searchUsers,
-  sendFriendRequest
+  sendFriendRequest,
 }: FriendsListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isProcessing, setIsProcessing] = useState<Record<string, boolean>>({});
@@ -73,12 +73,14 @@ export function FriendsList({
                     className="flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2 md:gap-3">
-                      <Avatar className="h-8 w-8 md:h-10 md:w-10 border border-zinc-700 bg-zinc-800">
-                        <AvatarImage src={friend.image} />
-                        <AvatarFallback className="capitalize text-xl md:text-2xl">
-                          {friend.name[0]}
-                        </AvatarFallback>
-                      </Avatar>
+                      
+                      <Avatar
+                        alt={friend.name}
+                        fallback={friend.username}
+                        imageUrl={friend.image}
+                        isActive={friend.isActive}
+                        size="sm"
+                      />
                       <span className="text-sm md:text-base text-zinc-400">
                         {friend.name}
                       </span>
