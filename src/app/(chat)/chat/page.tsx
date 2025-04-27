@@ -1,17 +1,33 @@
-import ChatLayout from "@/components/chat/ChatLayout";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
 import { Metadata } from "next";
+import Image from "next/image";
+import PirateSvg from "@/assets/Pirate.svg";
 
 export const metadata: Metadata = {
   title: "Subz Chat",
-  description: "Connect and chat with your friends in real-time using Subz Chat.",
+  description:
+    "Connect and chat with your friends in real-time using Subz Chat.",
 };
 const page = () => {
   return (
-    <SidebarProvider>
-      <ChatLayout />
-    </SidebarProvider>
+    <main className="w-screen h-svh flex flex-col my-bg">
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center flex flex-col justify-center items-center">
+          <Image
+            priority
+            width={150}
+            height={150}
+            src={PirateSvg}
+            className="invert "
+            alt="pirates"
+          />
+          <h1 className="text-2xl font-bold mb-2">Select a conversation</h1>
+          <p className="text-muted-foreground">
+            Choose a chat from the sidebar to start messaging
+          </p>
+        </div>
+      </div>
+    </main>
   );
 };
 
