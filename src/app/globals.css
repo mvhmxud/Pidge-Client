@@ -40,6 +40,21 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --animate-emojiIn : emojiIn 0.3s ease-out forwards;  
+
+  @keyframes emojiIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.75);
+      transfor : translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+      transfor : translateY(0);
+    }
+  }
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -50,6 +65,14 @@
 img:not([alt]) {
   border: 2px solid red;
 }
+
+/* .my-bg {
+  background-image: url('/bg.avif');
+  background-size: 22em;
+  background-repeat: repeat; 
+} */
+
+
 
 :root {
   --radius: 0.625rem;

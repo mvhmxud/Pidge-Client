@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { CookiesProvider } from "react-cookie";
+import { SidebarProvider } from "./ui/sidebar";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [client] = useState(() => new QueryClient());
@@ -15,7 +16,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <CookiesProvider>
         <AuthProvider>
           <QueryClientProvider client={client}>
-              {children}
+            <SidebarProvider>{children}</SidebarProvider>
           </QueryClientProvider>
         </AuthProvider>
       </CookiesProvider>

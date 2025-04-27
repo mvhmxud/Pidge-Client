@@ -1,45 +1,45 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { format } from "date-fns"
-import { Check, CheckCheck, Pencil } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { cn } from "@/lib/utils/cn"
-import { MessageAttachment } from "./MessageAttachments"
-import { MessageReactions } from "./MessageReactions"
+import { useState } from "react";
+import { format } from "date-fns";
+import { Check, CheckCheck, Pencil } from "lucide-react";
+import { cn } from "@/lib/utils/cn";
+import { MessageAttachment } from "./MessageAttachments";
+import { MessageReactions } from "./MessageReactions";
+import ReactionPicker from "./ReactionPicker";
+import Avatar from "../Common/Avatar";
 
 export interface Attachment {
-  type: "image" | "video"
-  url: string
+  type: "image" | "video";
+  url: string;
 }
 
 export interface Reaction {
-  emoji: string
+  emoji: string;
   users: {
-    _id: string
-    name?: string
-    image?: string
-  }[]
+    _id: string;
+    name?: string;
+    image?: string;
+  }[];
 }
 
 export interface User {
-  _id: string
-  name?: string
-  image?: string
+  _id: string;
+  name?: string;
+  avatar?: string;
 }
 
 export interface MessageProps {
-  id: string
-  content: string
-  sender: User
-  readBy: User[]
-  attachments?: Attachment[]
-  isEdited?: boolean
-  reactions?: Reaction[]
-  createdAt: Date
-  currentUserId: string 
-  onReactionClick?: (emoji: string) => void
+  id: string;
+  content: string;
+  sender: User;
+  readBy: User[];
+  attachments?: Attachment[];
+  isEdited?: boolean;
+  reactions?: Reaction[];
+  createdAt: Date;
+  currentUserId: string;
+  onReactionClick?: (emoji: string) => void;
 }
 
 export function Message({
@@ -54,8 +54,8 @@ export function Message({
   currentUserId,
   onReactionClick,
 }: MessageProps) {
-  const [showReactionPicker, setShowReactionPicker] = useState(false)
-  const isSentByCurrentUser = sender._id === currentUserId
+  const [showReactionPicker, setShowReactionPicker] = useState(false);
+  const isSentByCurrentUser = sender._id === currentUserId;
 
   return (
     <div
@@ -66,18 +66,34 @@ export function Message({
       )}
     >
       {!isSentByCurrentUser && (
-        <Avatar className="h-8 w-8">
-          <AvatarImage src={sender.image || "/placeholder.svg"} alt={sender.name || "User"} />
-          <AvatarFallback>{sender.name?.charAt(0) || "U"}</AvatarFallback>
-        </Avatar>
+        // <Avatar className="h-8 w-8">
+        //   <AvatarImage
+        //     src={sender.avatar || "/placeholder.svg"}
+        //     alt={sender.name || "User"}
+        //   />
+        //   <AvatarFallback>{sender.name?.charAt(0) || "U"}</AvatarFallback>
+        // </Avatar>
+        <div>
+          <Avatar
+            alt={sender.name}
+            fallback={sender.name}
+            imageUrl={sender.avatar}
+            isActive
+            size="sm"
+          />
+        </div>
       )}
 
-      <div className="flex flex-col gap-1 max-w-full">
+      <div className=" relative flex flex-col gap-1 max-w-full">
         {/* Message bubble */}
         <div
+          onMouseEnter={() => setShowReactionPicker(true)}
+          onMouseLeave={() => setShowReactionPicker(false)}
           className={cn(
             "rounded-xl px-3 py-3 text-sm break-words whitespace-pre-wrap",
-            isSentByCurrentUser ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+            isSentByCurrentUser
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground"
           )}
         >
           <p className="leading-snug">{content}</p>
@@ -104,10 +120,15 @@ export function Message({
 
             {isSentByCurrentUser && (
               <div className="flex items-center">
-                {readBy.length > 0 ? <CheckCheck className="h-3.5 w-3.5" /> : <Check className="h-3.5 w-3.5" />}
+                {readBy.length > 0 ? (
+                  <CheckCheck className="h-3.5 w-3.5" />
+                ) : (
+                  <Check className="h-3.5 w-3.5" />
+                )}
               </div>
             )}
           </div>
+          {showReactionPicker && <ReactionPicker />}
         </div>
 
         {/* Reactions */}
@@ -120,5 +141,5 @@ export function Message({
         )}
       </div>
     </div>
-  )
+  );
 }

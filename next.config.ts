@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       "lh3.googleusercontent.com",
       "res.cloudinary.com",
       "randomuser.me",
+      "images.unsplash.com"
     ],
   },
   webpack(config) {
