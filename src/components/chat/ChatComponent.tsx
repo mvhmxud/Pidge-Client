@@ -2,55 +2,84 @@
 import React, { useEffect, useRef } from "react";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
-import { User } from "@/types/types";
-import { Message } from "../message/Message";
+import { Message, MessageProps } from "../message/Message";
 import { ScrollArea } from "../ui/scroll-area";
-import { messages } from "@/lib/dummy";
+import { useChat } from "@/context/chat";
+import { MessageSquare } from "lucide-react";
+
 export const revalidate = 0;
-const dummyUser: Omit<User, "bio" | "lastActive" | "__v"> = {
-  _id: "1a",
-  username: "@johndoe",
-  name: "John Doe",
-  image: "https://randomuser.me/api/portraits/men/32.jpg",
-  isActive: true,
-};
 
+interface ChatComponentProps {
+  messages: Omit<MessageProps, "onReactionClick" | "currentUserId">[];
+  user: {
+    _id: string;
+    name: string;
+    username: string;
+    image: string;
+    isActive: boolean;
+  };
+  chatId: string;
+}
 
-const ChatComponent = () => {
+const ChatComponent = ({ messages, user, chatId }: ChatComponentProps) => {
+  const {
+    selectedChat,
+    messages: MessagesArray,
+    setMessages,
+    setSelectedChat,
+  } = useChat();
   const bottomPageRef = useRef<HTMLDivElement>(null);
-  const selectedChat = true;
+  useEffect(() => {
+    setSelectedChat(user);
+    setMessages(messages);
+  }, [messages]);
 
   useEffect(() => {
-    bottomPageRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
-  }, []);
+    if (MessagesArray.length > 0) {
+      bottomPageRef.current?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [MessagesArray]);
+
   return (
     <main className="w-screen h-svh flex flex-col my-bg">
-      {dummyUser && <ChatHeader user={dummyUser} />}
+      {selectedChat && <ChatHeader user={selectedChat} />}
 
       <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full px-6 py-4 space-y-4">
-          {messages.map((message, idx) => (
-            <Message
-              content={message.content}
-              attachments={message.attachments}
-              createdAt={message.timestamp}
-              currentUserId={dummyUser._id}
-              readBy={message.readBy}
-              sender={message.sender}
-              isEdited={message.isEdited}
-              reactions={message.reactions}
-              id={idx.toString()}
-              key={`${message.timestamp}${message.sender._id}`}
-            />
-          ))}
-          {/* dummy div so it scrolls to the most recent message  */}
-          <div ref={bottomPageRef}></div>
+        <ScrollArea className="h-full px-6 py-4 space-y-4 flex flex-col ">
+          {MessagesArray.length > 0 ? (
+            MessagesArray.map((message, idx) => (
+              <Message
+                content={message.content}
+                attachments={message.attachments}
+                createdAt={message.createdAt}
+                currentUserId={"680f5f27e7f60c85e08527c1"}
+                readBy={message.readBy}
+                sender={message.sender}
+                isEdited={message.isEdited}
+                reactions={message.reactions}
+                _id={idx.toString()}
+                key={`${message.createdAt}${message.sender._id}`}
+              />
+            ))
+          ) : (
+            <div className="flex flex-col items-center self-center justify-center gap-3 p-6 border border-black/10 dark:border-white/10 rounded-lg bg-white dark:bg-black">
+              <MessageSquare className="w-8 h-8 text-black/60 dark:text-white/60" />
+              <p className="text-center font-medium text-black dark:text-white">
+                No messages yet
+              </p>
+              <p className="text-center text-sm text-black/60 dark:text-white/60">
+                Start the conversation
+              </p>
+            </div>
+          )}
+          {/* Dummy div for scrolling to bottom (only rendered if messages exist) */}
+          {messages.length > 0 && <div ref={bottomPageRef} />}
         </ScrollArea>
       </div>
 
-      {dummyUser && <ChatInput />}
+      {selectedChat && <ChatInput chatId={chatId} username={user.username} />}
     </main>
   );
 };

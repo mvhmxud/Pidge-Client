@@ -26,11 +26,11 @@ export interface Reaction {
 export interface User {
   _id: string;
   name?: string;
-  avatar?: string;
+  image?: string;
 }
 
 export interface MessageProps {
-  id: string;
+  _id: string;
   content: string;
   sender: User;
   readBy: User[];
@@ -43,7 +43,6 @@ export interface MessageProps {
 }
 
 export function Message({
-  id,
   content,
   sender,
   readBy,
@@ -60,54 +59,49 @@ export function Message({
   return (
     <div
       className={cn(
-        "flex w-full max-w-[80%] gap-2",
+        "flex w-full lg:max-w-[80%] gap-2",
         isSentByCurrentUser ? "ml-auto flex-row-reverse" : "mr-auto",
         "mb-3"
       )}
     >
       {!isSentByCurrentUser && (
-        // <Avatar className="h-8 w-8">
-        //   <AvatarImage
-        //     src={sender.avatar || "/placeholder.svg"}
-        //     alt={sender.name || "User"}
-        //   />
-        //   <AvatarFallback>{sender.name?.charAt(0) || "U"}</AvatarFallback>
-        // </Avatar>
         <div>
           <Avatar
             alt={sender.name}
             fallback={sender.name}
-            imageUrl={sender.avatar}
+            imageUrl={sender.image}
             isActive
             size="sm"
           />
         </div>
       )}
 
-      <div className=" relative flex flex-col gap-1 max-w-full">
+      <div className=" relative flex flex-col gap-1 max-w-full lg:max-w-[90%]">
         {/* Message bubble */}
         <div
           onMouseEnter={() => setShowReactionPicker(true)}
           onMouseLeave={() => setShowReactionPicker(false)}
           className={cn(
-            "rounded-xl px-3 py-3 text-sm break-words whitespace-pre-wrap",
+            "rounded-xl px-3 py-3 text-sm break-words whitespace-pre-wrap w-full",
             isSentByCurrentUser
               ? "bg-primary text-primary-foreground"
               : "bg-muted text-muted-foreground"
           )}
         >
-          <p className="leading-snug">{content}</p>
+          <p
+            className={`leading-snug mb-2 ${
+              attachments.length > 0 ? "max-w-96" : ""
+            }`}
+          >
+            {content}
+          </p>
 
           {attachments.length > 0 && (
-            <div className="mt-1 grid gap-1">
-              {attachments.map((attachment, index) => (
-                <MessageAttachment key={index} attachment={attachment} />
-              ))}
-            </div>
+            <MessageAttachment attachments={attachments} />
           )}
 
           {/* Footer */}
-          <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground">
+          <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground overflow-visible">
             <div className="flex items-center gap-1">
               <span>{format(createdAt, "HH:mm")}</span>
               {isEdited && (
@@ -128,7 +122,11 @@ export function Message({
               </div>
             )}
           </div>
-          {showReactionPicker && <ReactionPicker />}
+          {showReactionPicker && (
+            <ReactionPicker
+              position={sender._id === currentUserId ? "left" : "right"}
+            />
+          )}
         </div>
 
         {/* Reactions */}

@@ -31,7 +31,7 @@ const ChatHeader = ({ user }: ChatHeaderProps) => {
             </h1>
           </div>
           <span className="px-2 py-0.5 rounded bg-muted text-muted-foreground shadow text-xs md:text-sm font-medium">
-            {user?.username}
+            @{user?.username}
           </span>
         </div>
       </div>

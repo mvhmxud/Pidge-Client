@@ -1,37 +1,53 @@
-    import ChatComponent from "@/components/chat/ChatComponent";
-    // import api from "@/lib/axios";
+import ChatComponent from "@/components/chat/ChatComponent";
+// import api from "@/lib/axios";
+export const dynamic = "force-dynamic";
 
-    interface PageProps {
-    params: {
-        chatId: string;
-    };
+interface PageProps {
+  params: {
+    chatId: string;
+  };
+}
+import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
+
+const page = async ({ params }: PageProps) => {
+  const { chatId } = await params;
+  const chatData = await fetchChatData(chatId);
+  if (!chatData) notFound();
+  return (
+    <ChatComponent
+      chatId={chatId}
+      user={chatData.chatInfo.user}
+      messages={chatData.messages}
+    />
+  );
+};
+
+export default page;
+
+async function fetchChatData(chatId: string) {
+  try {
+    const cookieStore = cookies();
+    const token = (await cookieStore).get("token")?.value; // get the 'token' cookie
+
+    const res = await fetch(
+      `http://localhost:8080/api/chats/${chatId}/messages`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `token=${token}`, // manually send it
+        },
+      }
+    );
+
+    if (!res.ok) {
+      console.log(res);
+      throw new Error("Failed to fetch chat data");
     }
 
-    // async function fetchChatData(chatId: string) {
-    //     console.log(chatId)
-    // try {
-    //     const res = await fetch(
-    //     `http://localhost:8080/api/chats/${chatId}/messages`,
-    //     {
-    //         method: "GET",
-    //         credentials: "include",
-    //         headers: {
-    //         "Content-Type": "application/json",
-    //         },
-    //     }
-    //     );
-
-    //     if (!res.ok) throw new Error("Failed to fetch chat data");
-    //         return await res.json();
-    // } catch (error) {
-    //     console.log(error);
-    // }
-    // }
-
-    const page = async ({ params: { chatId } }: PageProps) => {
-    // const chatData = await fetchChatData(chatId);
-    // console.log(chatData);
-    return <ChatComponent />;
-    };
-
-    export default page;
+    return await res.json();
+  } catch (error) {
+    console.log(error);
+  }
+}

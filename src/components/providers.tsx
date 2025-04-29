@@ -20,7 +20,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           </QueryClientProvider>
         </AuthProvider>
       </CookiesProvider>
-      <Toaster />
+      <Toaster position="top-center" />
     </GoogleOAuthProvider>
   );
 }
