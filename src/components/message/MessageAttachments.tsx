@@ -1,41 +1,182 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import type { Attachment } from "./Message"
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import CustomModal from "../Modal";
 
-interface MessageAttachmentProps {
-  attachment: Attachment
+export interface Attachment {
+  type: string;
+  url: string;
 }
 
-export function MessageAttachment({ attachment }: MessageAttachmentProps) {
-  const [isLoading, setIsLoading] = useState(true)
+interface MessageAttachmentProps {
+  attachments: Attachment[];
+}
 
-  if (attachment.type === "image") {
+export function MessageAttachment({ attachments }: MessageAttachmentProps) {
+  const imageAttachments =
+    attachments?.filter((attachment) => attachment.type === "image") || [];
+
+  if (!attachments || attachments.length === 0) {
+    return null;
+  }
+
+  if (imageAttachments.length > 0) {
+    return <ImageGrid images={imageAttachments} />;
+  }
+
+  const videoAttachment = attachments.find(
+    (attachment) => attachment.type === "video"
+  );
+  if (videoAttachment) {
     return (
-      <div className="relative rounded-md overflow-hidden">
-        <Image
-          src={attachment.url || "/placeholder.svg"}
-          alt="Image attachment"
-          width={1000}
-          height={1000}
-          className={`max-h-[300px] w-auto object-contain transition-opacity duration-200 ${
-            isLoading ? "opacity-0" : "opacity-100"
-          }`}
-          onLoad={() => setIsLoading(false)}
-        />
-        {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-muted">
-            <span className="text-xs text-muted-foreground">Loading image...</span>
+      <video
+        src={videoAttachment.url}
+        controls
+        className="max-h-[300px] w-full rounded-md"
+      />
+    );
+  }
+
+  return null;
+}
+
+interface GridProps {
+  images: Attachment[];
+}
+
+function ImageGrid({ images }: GridProps) {
+  const count = images.length;
+
+  return (
+    <div className="grid gap-1 max-w-full min-w-60 lg:w-92 h-64">
+      {count === 1 && (
+        <CustomModal
+          trigger={
+            <div className="w-full h-full relative">
+              <Image
+                src={images[0].url || "/placeholder.svg"}
+                alt="Image attachment"
+                fill
+                className="object-cover rounded cursor-pointer hover:brightness-75 transition-all ease-in-out "
+              />
+            </div>
+          }
+        >
+          <Image
+            src={images[0].url || "/placeholder.svg"}
+            alt="Image attachment"
+            width={1000}
+            height={1000}
+            className="object-cover rounded"
+          />
+        </CustomModal>
+      )}
+
+      {count === 2 && (
+        <div className="grid grid-cols-2 gap-1 h-full">
+          {images.map((img, idx) => (
+            <CustomModal
+              key={idx}
+              trigger={
+                <div className="relative">
+                  <Image
+                    src={img.url || "/placeholder.svg"}
+                    alt="Image attachment"
+                    fill
+                    className="object-cover rounded cursor-pointer hover:brightness-75 transition-all ease-in-out "
+                  />
+                </div>
+              }
+            >
+              <Image
+                alt="Image attachment"
+                src={img.url || "/placeholder.svg"}
+                width={1000}
+                height={1000}
+              />
+            </CustomModal>
+          ))}
+        </div>
+      )}
+
+      {count === 3 && (
+        <div className="grid grid-cols-2 gap-1 h-full">
+          <CustomModal
+            trigger={
+              <div className="relative col-span-1 h-full">
+                <Image
+                  src={images[0].url || "/placeholder.svg"}
+                  alt="Image attachment"
+                  fill
+                  className="object-cover rounded cursor-pointer hover:brightness-75 transition-all ease-in-out "
+                />
+              </div>
+            }
+          >
+            <Image
+              src={images[0].url || "/placeholder.svg"}
+              alt="Image attachment"
+              width={1000}
+              height={1000}
+              className="object-cover rounded cursor-pointer hover:brightness-75 transition-all ease-in-out "
+            />
+          </CustomModal>
+          <div className="grid grid-rows-2 gap-1 h-full">
+            {images.slice(1).map((img, idx) => (
+              <CustomModal
+                key={idx}
+                trigger={
+                  <div key={idx} className="relative h-full">
+                    <Image
+                      src={img.url || "/placeholder.svg"}
+                      alt="Image attachment"
+                      fill
+                      className="object-cover rounded cursor-pointer hover:brightness-75 transition-all ease-in-out "
+                    />
+                  </div>
+                }
+              >
+                <Image
+                  src={img.url || "/placeholder.svg"}
+                  alt="Image attachment"
+                  width={1000}
+                  height={1000}
+                  className="object-cover rounded cursor-pointer hover:brightness-75 transition-all ease-in-out "
+                />
+              </CustomModal>
+            ))}
           </div>
-        )}
-      </div>
-    )
-  }
+        </div>
+      )}
 
-  if (attachment.type === "video") {
-    return <video src={attachment.url} controls className="max-h-[300px] w-full rounded-md" />
-  }
-
-  return null
+      {count >= 4 && (
+        <div className="grid grid-cols-2 grid-rows-2 gap-1 h-full">
+          {images.slice(0, 4).map((img, idx) => (
+            <CustomModal
+              key={idx}
+              trigger={
+                <div key={idx} className="relative">
+                  <Image
+                    src={img.url || "/placeholder.svg"}
+                    alt="Image attachment"
+                    fill
+                    className="object-cover rounded cursor-pointer hover:brightness-75 transition-all ease-in-out "
+                  />
+                </div>
+              }
+            >
+              <Image
+                src={img.url || "/placeholder.svg"}
+                alt="Image attachment"
+                width={1000}
+                height={1000}
+                className="object-cover rounded cursor-pointer hover:brightness-75 transition-all ease-in-out "
+              />
+            </CustomModal>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
