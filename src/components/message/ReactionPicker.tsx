@@ -46,7 +46,7 @@ const ReactionPicker = ({ position }: ReactionPickerProps) => {
   return (
     <div
       ref={pickerRef}
-      className={`absolute z-10 -bottom-4 ${positionStyles[finalPosition]} bg-primary rounded-full flex p-1 justify-between items-center drop-shadow-2xl w-fit gap-2 transition-all duration-300`}
+      className={`absolute z-10 bottom-1 ${positionStyles[finalPosition]} bg-primary rounded-full flex p-1 justify-between items-center drop-shadow-2xl w-fit gap-2 transition-all duration-300`}
     >
       {emojis.map((emoji, i) => (
         <span

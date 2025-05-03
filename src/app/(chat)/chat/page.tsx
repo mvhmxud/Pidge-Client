@@ -2,13 +2,17 @@ import React from "react";
 import { Metadata } from "next";
 import Image from "next/image";
 import PirateSvg from "@/assets/Pirate.svg";
+import { getSession } from "@/lib/utils/getSession";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Subz Chat",
   description:
     "Connect and chat with your friends in real-time using Subz Chat.",
 };
-const page = () => {
+const page = async () => {
+  const session = await getSession();
+  if (!session) return redirect("/");
   return (
     <main className="w-screen h-svh flex flex-col my-bg">
       <div className="flex items-center justify-center h-full">
@@ -69,6 +73,7 @@ export default page;
 //     });
 //   }
 // };
+
 // const handleSendMessage = (message: string) => {
 //   if (testSocket) {
 //     testSocket.emit("message", {
