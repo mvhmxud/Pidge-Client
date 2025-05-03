@@ -5,6 +5,7 @@ import {
   UserPlus,
   AlertCircle,
   RotateCw,
+  Paperclip,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -177,13 +178,17 @@ export function AppSidebar({ isCollapsed, currentUser }: AppSidebarProps) {
                         </span>
                       )}
                     </div>
-                    <div className="text-sm text-muted-foreground truncate mt-1">
+                    <div className="text-sm text-muted-foreground truncate mt-1 flex items-center gap-1">
                       {lastMessage ? (
                         <>
                           {lastMessage.sender._id === currentUser._id && (
-                            <span className="text-primary">You: </span>
+                            <span className="text-primary">You : </span>
                           )}
-                          {lastMessage.content}
+                          {lastMessage.content ? (
+                            lastMessage.content
+                          ) : (
+                            <Paperclip className="mt-2" size={15} />
+                          )}
                         </>
                       ) : (
                         <span className="italic">No messages yet</span>

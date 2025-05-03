@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Textarea } from "../ui/textarea";
 import { Paperclip, Send, Video, X } from "lucide-react";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
-import { z } from "zod";
+import { boolean, z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
@@ -83,13 +83,17 @@ const ChatInput = ({
       })) ?? [],
     isEdited: false,
     reactions: [],
+    pending: true,
   });
 
   const onSubmit = async (data: FormValues) => {
+    form.reset();
+    setFiles([]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
     try {
       const newMessage = createOptimisticMessage(data);
       setMessages((prev) => [...prev, newMessage]);
-
+      console.log(newMessage);
       try {
         const formData = new FormData();
 
@@ -102,21 +106,24 @@ const ChatInput = ({
           });
         }
 
-        const res = await api.post("/api/chats/messages/send", formData, {
+        await api.post("/api/chats/messages/send", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        
+
+        setMessages((prev) =>
+          prev.map((message) =>
+            message._id === newMessage._id
+              ? { ...message, pending: false }
+              : message
+          )
+        );
       } catch (error) {
         setMessages((prev) =>
           prev.filter((message) => message._id !== newMessage._id)
         );
       }
-
-      form.reset();
-      setFiles([]);
-      if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       toast.error("Failed to send message", {
         description:

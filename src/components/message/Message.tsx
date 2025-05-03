@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
-import { Check, CheckCheck, Pencil } from "lucide-react";
+import { Check, CheckCheck, Loader, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { MessageAttachment } from "./MessageAttachments";
 import { MessageReactions } from "./MessageReactions";
@@ -40,6 +40,7 @@ export interface MessageProps {
   createdAt: Date;
   currentUserId: string;
   onReactionClick?: (emoji: string) => void;
+  pending: boolean | false;
 }
 
 export function Message({
@@ -51,6 +52,7 @@ export function Message({
   reactions = [],
   createdAt,
   currentUserId,
+  pending,
   onReactionClick,
 }: MessageProps) {
   const [showReactionPicker, setShowReactionPicker] = useState(false);
@@ -59,7 +61,7 @@ export function Message({
   return (
     <div
       className={cn(
-        "flex w-full lg:max-w-[80%] gap-2",
+        "flex w-full lg:max-w-[80%] gap-2 ",
         isSentByCurrentUser ? "ml-auto flex-row-reverse" : "mr-auto",
         "mb-3"
       )}
@@ -79,10 +81,11 @@ export function Message({
       <div className=" relative flex flex-col gap-1 max-w-full lg:max-w-[90%]">
         {/* Message bubble */}
         <div
-          onMouseEnter={() => setShowReactionPicker(true)}
-          onMouseLeave={() => setShowReactionPicker(false)}
+          onMouseEnter={() => !pending && setShowReactionPicker(true)}
+          onMouseLeave={() => !pending && setShowReactionPicker(false)}
           className={cn(
             "rounded-xl px-3 py-3 text-sm break-words whitespace-pre-wrap w-full",
+            pending ? "opacity-50 grayscale animate-pulse" : "",
             isSentByCurrentUser
               ? "bg-primary text-primary-foreground"
               : "bg-muted text-muted-foreground"
@@ -113,11 +116,13 @@ export function Message({
             </div>
 
             {isSentByCurrentUser && (
-              <div className="flex items-center">
+              <div className="flex items-center ">
                 {readBy.length > 0 ? (
                   <CheckCheck className="h-3.5 w-3.5" />
-                ) : (
+                ) : !pending ? (
                   <Check className="h-3.5 w-3.5" />
+                ) : (
+                  <Loader className="h-3.5 w-3.5 animate-spin" />
                 )}
               </div>
             )}

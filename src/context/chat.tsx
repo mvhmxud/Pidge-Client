@@ -19,7 +19,7 @@ interface SelectedChatInfo {
 export type Message = Omit<MessageProps, "onReactionClick" | "currentUserId">;
 
 interface ChatContextType {
-  messages: Message[] | [];
+  messages: Message[] | null;
   selectedChat: SelectedChatInfo | null;
   setSelectedChat: Dispatch<SetStateAction<SelectedChatInfo | null>>;
   setMessages: Dispatch<SetStateAction<Message[]>>;

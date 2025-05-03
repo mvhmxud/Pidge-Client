@@ -5,7 +5,7 @@ import { getRefreshToken } from "./lib/utils/getRefreshToken";
 export default async function middleware(req: NextRequest) {
   // const session = req.cookies.get("token");
   const refreshToken = req.cookies.get("refreshToken");
-  if (!refreshToken) return;
+  if (!refreshToken) return;  
   // const isExpired = session?.value ? await isTokenExpired(session.value) : false;
   try {
     const { token, refreshToken: newRefreshToken } = await getRefreshToken(

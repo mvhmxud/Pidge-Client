@@ -31,7 +31,7 @@ async function fetchChatData(chatId: string) {
     const token = (await cookieStore).get("token")?.value; // get the 'token' cookie
 
     const res = await fetch(
-      `http://localhost:8080/api/chats/${chatId}/messages`,
+      `${process.env.PUBLIC_API_URL}/api/chats/${chatId}/messages`,
       {
         method: "GET",
         headers: {
