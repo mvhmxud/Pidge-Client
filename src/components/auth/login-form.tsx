@@ -36,7 +36,6 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { setUser } = useAuth();
   const router = useRouter();
   const formSchema = loginSchema;
 

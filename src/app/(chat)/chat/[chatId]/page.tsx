@@ -1,5 +1,4 @@
 import ChatComponent from "@/components/chat/ChatComponent";
-// import api from "@/lib/axios";
 export const dynamic = "force-dynamic";
 
 interface PageProps {
@@ -14,9 +13,10 @@ const page = async ({ params }: PageProps) => {
   const { chatId } = await params;
   const chatData = await fetchChatData(chatId);
   if (!chatData) notFound();
-  return (
+   return (
     <ChatComponent
       chatId={chatId}
+      selectedChatId={chatData.chatInfo._id}
       user={chatData.chatInfo.user}
       messages={chatData.messages}
     />

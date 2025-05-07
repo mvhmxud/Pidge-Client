@@ -37,7 +37,6 @@ export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { setUser } = useAuth();
   const router = useRouter();
   const formSchema = registerSchema;
 
@@ -58,7 +57,6 @@ export function RegisterForm({
       toast.success("Sign up successful, redirecting...", {
         duration: 2000,
       });
-      setUser(res.data.user);
       router.push("/");
     },
     onError: (err: AxiosError<{ message: string }>) => {

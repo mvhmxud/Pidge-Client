@@ -6,6 +6,7 @@ import {
   AlertCircle,
   RotateCw,
   Paperclip,
+  Bird,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +33,9 @@ import { paths } from "@/lib/utils/paths";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import dynamic from "next/dynamic";
+import { useAuth } from "@/context/auth";
+import { useChat } from "@/context/chat";
+import { useEffect } from "react";
 
 const ClientOnlyDateFormatter = dynamic(
   () => import("@/lib/utils/formate-date"),
@@ -62,10 +66,20 @@ interface Chat {
 
 interface AppSidebarProps {
   isCollapsed: boolean;
-  currentUser: ChatMember;
+  toggleSideBar: () => void;
 }
 
-export function AppSidebar({ isCollapsed, currentUser }: AppSidebarProps) {
+export function AppSidebar({ isCollapsed, toggleSideBar }: AppSidebarProps) {
+  const session = useAuth();
+  const { friends, setFriends } = useChat();
+  const currentUser = {
+    _id: session?.userId as string,
+    email: session?.email as string,
+    name: session?.name as string,
+    username: session?.username as string,
+    image: session?.image as string,
+    isAcive: true,
+  };
   const {
     data: chats = [],
     isLoading,
@@ -74,10 +88,16 @@ export function AppSidebar({ isCollapsed, currentUser }: AppSidebarProps) {
     refetch,
   } = useQuery<Chat[]>({
     queryKey: ["chats", currentUser._id],
-    queryFn: async () =>
-      (await api.get("api/chats/direct-chats")).data.formattedChats,
+    queryFn: async () => {
+      const res = await (
+        await api.get("api/chats/direct-chats")
+      ).data.formattedChats;
+      setFriends(res);
+      return res;
+    },
     staleTime: 60 * 1000,
     retry: 2,
+    refetchOnMount: "always",
   });
 
   const renderChats = () => {
@@ -126,7 +146,7 @@ export function AppSidebar({ isCollapsed, currentUser }: AppSidebarProps) {
       );
     }
 
-    if (!chats.length) {
+    if (!chats.length && !isLoading) {
       return (
         <SidebarMenu>
           <div className="flex flex-col items-center justify-center p-6 text-center h-64">
@@ -148,7 +168,7 @@ export function AppSidebar({ isCollapsed, currentUser }: AppSidebarProps) {
 
     return (
       <SidebarMenu>
-        {chats.map(({ _id, member, lastMessage }) => (
+        {!isLoading && friends.map(({ _id, member, lastMessage }) => (
           <SidebarMenuItem key={_id}>
             <Link
               href={`${paths.chat}/${_id}`}
@@ -158,17 +178,17 @@ export function AppSidebar({ isCollapsed, currentUser }: AppSidebarProps) {
             >
               <div className="flex items-center w-full">
                 <Avatar
-                  alt={member.name}
-                  fallback={member.username}
-                  imageUrl={member.image}
-                  isActive={member.isActive}
+                  alt={member?.name}
+                  fallback={member?.username}
+                  imageUrl={member?.image}
+                  isActive={member?.isActive}
                   size={isCollapsed ? "sm" : "md"}
                 />
                 {!isCollapsed && (
                   <div className="flex-1 min-w-0 ml-3">
                     <div className="flex justify-between items-center">
                       <span className="font-medium truncate max-w-[120px]">
-                        {member.name}
+                        {member?.name}
                       </span>
                       {lastMessage && (
                         <span className="text-xs text-muted-foreground whitespace-nowrap">
@@ -259,8 +279,13 @@ export function AppSidebar({ isCollapsed, currentUser }: AppSidebarProps) {
     <Sidebar collapsible="icon">
       <SidebarHeader className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center gap-2">
-          <SidebarTrigger />
-          {!isCollapsed && <h1 className="text-xl font-bold">NEXT CHAT</h1>}
+          <span
+            onClick={toggleSideBar}
+            className="text-xl font-bold capitalize flex gap-2 items-center cursor-pointer"
+          >
+            <Bird />
+            {!isCollapsed && <h1>pidge</h1>}
+          </span>
         </div>
       </SidebarHeader>
       <SidebarContent>

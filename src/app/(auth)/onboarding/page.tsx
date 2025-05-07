@@ -1,13 +1,14 @@
 import { OnBoardingForm } from "@/components/auth/onboarding-form";
 import UserProfile from "@/components/userProfile";
 import { getSession } from "@/lib/utils/getSession";
+import { paths } from "@/lib/utils/paths";
 import { redirect } from "next/navigation";
 import React from "react";
 
 const Onboarding = async () => {
   const session = await getSession();
   if (!session) {
-    redirect("/sign-in");
+    redirect(paths.login);
   }
   // if (!session.onboarding) {
   //   redirect("/");

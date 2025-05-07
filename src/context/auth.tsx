@@ -1,32 +1,26 @@
 "use client";
-import { createContext, useContext, useState } from "react";
-import { UserToken } from "@/types/types";
 
-interface AuthContextType {
-  user: UserToken | null;
-  setUser: (user: UserToken | null) => void;
-}
+import { createContext, useContext } from "react";
+import { ChatMember } from "@/types/types";
 
-// TODO: get default value from cookies
-
-export const AuthContext = createContext<AuthContextType>({
-  user: null,
-  setUser: () => {},
-});
-
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserToken | null>(null);
-  return (
-    <AuthContext.Provider value={{ user, setUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+const AuthContext = createContext<ChatMember | null>(null);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
+};
+
+export const AuthProvider = ({
+  children,
+  session,
+}: {
+  children: React.ReactNode;
+  session: ChatMember | null;
+}) => {
+  return (
+    <AuthContext.Provider value={session}>{children}</AuthContext.Provider>
+  );
 };

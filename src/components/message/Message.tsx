@@ -18,7 +18,7 @@ export interface Reaction {
   emoji: string;
   users: {
     _id: string;
-    name?: string;
+    username?: string;
     image?: string;
   }[];
 }
@@ -27,6 +27,7 @@ export interface User {
   _id: string;
   name?: string;
   image?: string;
+  isActive?: boolean;
 }
 
 export interface MessageProps {
@@ -39,7 +40,7 @@ export interface MessageProps {
   reactions?: Reaction[];
   createdAt: Date;
   currentUserId: string;
-  onReactionClick?: (emoji: string) => void;
+  onReactionClick: (emoji: string, messageId: string) => void;
   pending: boolean | false;
 }
 
@@ -53,10 +54,16 @@ export function Message({
   createdAt,
   currentUserId,
   pending,
+  _id,
   onReactionClick,
 }: MessageProps) {
   const [showReactionPicker, setShowReactionPicker] = useState(false);
   const isSentByCurrentUser = sender._id === currentUserId;
+
+  const handleEmojiClick = (emoji: string) => {
+    onReactionClick(emoji, _id);
+    setShowReactionPicker(false);
+  };
 
   return (
     <div
@@ -72,7 +79,6 @@ export function Message({
             alt={sender.name}
             fallback={sender.name}
             imageUrl={sender.image}
-            isActive
             size="sm"
           />
         </div>
@@ -84,7 +90,7 @@ export function Message({
           onMouseEnter={() => !pending && setShowReactionPicker(true)}
           onMouseLeave={() => !pending && setShowReactionPicker(false)}
           className={cn(
-            "rounded-xl px-3 py-3 text-sm break-words whitespace-pre-wrap w-full",
+            "rounded-xl px-3 py-3 text-sm break-words whitespace-pre-wrap w-full text-wrap",
             pending ? "opacity-50 grayscale animate-pulse" : "",
             isSentByCurrentUser
               ? "bg-primary text-primary-foreground"
@@ -130,6 +136,7 @@ export function Message({
           {showReactionPicker && (
             <ReactionPicker
               position={sender._id === currentUserId ? "left" : "right"}
+              onEmojiClick={handleEmojiClick}
             />
           )}
         </div>
@@ -137,6 +144,7 @@ export function Message({
         {/* Reactions */}
         {reactions.length > 0 && (
           <MessageReactions
+            messageId={_id}
             reactions={reactions}
             currentUserId={currentUserId}
             onReactionClick={onReactionClick}
