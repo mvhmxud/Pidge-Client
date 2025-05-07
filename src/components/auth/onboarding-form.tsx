@@ -28,18 +28,15 @@ import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
-import { JWTPayload } from "jose";
 import { Textarea } from "../ui/textarea";
 import ImageUpload from "./ImageUpload";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ChatMember } from "@/types/types";
 interface OnBoardingFormProps extends React.ComponentProps<"div"> {
-  user: JWTPayload & {
-    username?: string;
-    image?: string;
-    bio?: string;
-    name?: string;
-  };
+  user: ChatMember & {
+    exp?: number;
+}
 }
 
 export function OnBoardingForm({

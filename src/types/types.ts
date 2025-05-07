@@ -24,3 +24,13 @@ export interface FriendRequest {
   username: string;
   _id: string;
 }
+
+export interface ChatMember {
+  userId: string;
+  email: string;
+  name: string;
+  username: string;
+  image?: string;
+  isActive?: boolean;
+  onboarding?: boolean;
+}

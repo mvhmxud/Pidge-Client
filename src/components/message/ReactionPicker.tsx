@@ -6,9 +6,10 @@ const emojis = ["💖", "🔥", "😂", "🥲", "💀"];
 
 interface ReactionPickerProps {
   position: "left" | "right";
+  onEmojiClick: (emoji: string) => void;
 }
 
-const ReactionPicker = ({ position }: ReactionPickerProps) => {
+const ReactionPicker = ({ position, onEmojiClick }: ReactionPickerProps) => {
   const pickerRef = useRef<HTMLDivElement>(null);
   const [finalPosition, setFinalPosition] = useState<
     "left" | "right" | "center"
@@ -50,6 +51,7 @@ const ReactionPicker = ({ position }: ReactionPickerProps) => {
     >
       {emojis.map((emoji, i) => (
         <span
+          onClick={() => onEmojiClick(emoji)}
           key={i}
           className="w-6 h-6 text-lg flex justify-center items-center text-center rounded-full cursor-pointer transition-transform hover:scale-125 hover:bg-primary-foreground/5 opacity-0 animate-emojiIn"
           style={{ animationDelay: `${i * 100}ms` }}

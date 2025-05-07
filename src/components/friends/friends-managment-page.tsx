@@ -4,6 +4,8 @@ import { FriendsManagement } from "@/components/friends/friends-managment";
 import { Spinner } from "../ui/spinner";
 import { useFriends } from "@/hooks/useFriends";
 import { toast } from "sonner";
+import BackButton from "../Common/BackButton";
+import { Button } from "../ui/button";
 
 export default function FriendsManagementPage() {
   const {
@@ -42,7 +44,10 @@ export default function FriendsManagementPage() {
 
   if (error) {
     return (
-      <div className="flex h-[500px] w-full max-w-4xl items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-white">
+      <div className=" relative flex h-[500px] w-full max-w-4xl items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-white">
+        <BackButton>
+          <Button className="absolute top-0 right-0">back</Button>
+        </BackButton>
         <div className="text-center">
           <p className="text-red-500">{error.message}</p>
           <button

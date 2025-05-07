@@ -9,7 +9,7 @@ export const revalidate = 0;
 const page = async () => {
   const session = await getSession();
   if (!session) redirect(paths.login);
-  if (session.onboarding) redirect("/onboarding"); // temporarly disabled untill we have a onboarding page
+  if (session.onboarding) redirect("/onboarding");
 
   return (
     <div className=" flex flex-col w-full items-center justify-center h-screen p-4">
