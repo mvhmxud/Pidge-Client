@@ -1,6 +1,7 @@
 import React from "react";
 import { Video, X } from "lucide-react";
 import { formatFileSize } from "@/lib/utils/file-utils";
+import Image from "next/image";
 
 interface FilePreviewProps {
   files: File[];
@@ -13,11 +14,13 @@ const FilePreview = ({ files, onRemove }: FilePreviewProps) => {
       {files.map((file, index) => (
         <div key={index} className="relative group overflow-hidden">
           {file.type.startsWith("image/") ? (
-            <img
-              src={URL.createObjectURL(file)}
-              alt={`Preview ${index}`}
-              className="h-16 w-16 object-cover rounded-md"
-            />
+            <div className="h-16 w-16 object-cover rounded-md">
+              <Image
+                fill
+                src={URL.createObjectURL(file)}
+                alt={`Preview ${index}`}
+              />
+            </div>
           ) : (
             <div className="h-16 w-16 bg-muted rounded-md flex items-center justify-center">
               <span className="text-xs">

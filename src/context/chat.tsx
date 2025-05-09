@@ -1,4 +1,5 @@
 import { MessageProps } from "@/components/message/Message";
+import { normalize } from "@/lib/utils/normalizeText";
 import {
   createContext,
   useContext,
@@ -88,7 +89,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         }
         const optimisticIndex = prev.findIndex(
           (m) =>
-            m.content === data.message.content &&
+            normalize(m.content) === normalize(data.message.content) &&
             m.sender._id === data.message.sender._id &&
             Math.abs(
               new Date(m.createdAt).getTime() -
@@ -111,17 +112,9 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       const updated = [...prev];
       updated[idx] = {
         ...updated[idx],
-        lastMessage: {
-          _id: data.message._id, // Fixed typo
-          content: data.message.content,
-          createdAt: data.message.createdAt,
-          sender: {
-            _id: data.message.sender._id, // Fixed typo
-            name: data.message.sender.name,
-            username: data.message.sender.username,
-          },
-        },
+        lastMessage: { ...data.message, sender: { ...data.message.sender } },
       };
+
       return updated.sort((a, b) => {
         const dateA = a.lastMessage
           ? new Date(a.lastMessage.createdAt).getTime()

@@ -91,7 +91,7 @@ export function useFriends() {
       });
       return response.data;
     },
-    onSuccess: (res) => {
+    onSuccess: () => {
       toast.success("Friend Request sent successfully");  
     },
     onError: (error: AxiosError | Error) => {

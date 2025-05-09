@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import CustomModal from "../Modal";
 
 export interface Attachment {

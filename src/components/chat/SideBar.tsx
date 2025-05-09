@@ -7,6 +7,7 @@ import {
   RotateCw,
   Paperclip,
   Bird,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +21,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
   Tooltip,
@@ -35,7 +35,8 @@ import api from "@/lib/axios";
 import dynamic from "next/dynamic";
 import { useAuth } from "@/context/auth";
 import { useChat } from "@/context/chat";
-import { useEffect } from "react";
+import Dropdown from "../Common/DropDown";
+import { signOut } from "@/lib/utils/signOut";
 
 const ClientOnlyDateFormatter = dynamic(
   () => import("@/lib/utils/formate-date"),
@@ -66,10 +67,14 @@ interface Chat {
 
 interface AppSidebarProps {
   isCollapsed: boolean;
+  isMobile: boolean;
   toggleSideBar: () => void;
 }
 
-export function AppSidebar({ isCollapsed, toggleSideBar }: AppSidebarProps) {
+export function AppSidebar({
+  isCollapsed,
+  toggleSideBar,
+}: AppSidebarProps) {
   const session = useAuth();
   const { friends, setFriends } = useChat();
   const currentUser = {
@@ -168,58 +173,59 @@ export function AppSidebar({ isCollapsed, toggleSideBar }: AppSidebarProps) {
 
     return (
       <SidebarMenu>
-        {!isLoading && friends.map(({ _id, member, lastMessage }) => (
-          <SidebarMenuItem key={_id}>
-            <Link
-              href={`${paths.chat}/${_id}`}
-              className={`flex items-start cursor-pointer hover:bg-muted rounded-lg ease-in  ${
-                isCollapsed ? "justify-center" : "gap-3 p-3"
-              } h-auto`}
-            >
-              <div className="flex items-center w-full">
-                <Avatar
-                  alt={member?.name}
-                  fallback={member?.username}
-                  imageUrl={member?.image}
-                  isActive={member?.isActive}
-                  size={isCollapsed ? "sm" : "md"}
-                />
-                {!isCollapsed && (
-                  <div className="flex-1 min-w-0 ml-3">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium truncate max-w-[120px]">
-                        {member?.name}
-                      </span>
-                      {lastMessage && (
-                        <span className="text-xs text-muted-foreground whitespace-nowrap">
-                          <ClientOnlyDateFormatter
-                            dateString={lastMessage.createdAt}
-                          />
+        {!isLoading &&
+          friends.map(({ _id, member, lastMessage }) => (
+            <SidebarMenuItem key={_id}>
+              <Link
+                href={`${paths.chat}/${_id}`}
+                className={`flex items-start cursor-pointer hover:bg-muted rounded-lg ease-in  ${
+                  isCollapsed ? "justify-center" : "gap-3 p-3"
+                } h-auto`}
+              >
+                <div className="flex items-center w-full">
+                  <Avatar
+                    alt={member?.name}
+                    fallback={member?.username}
+                    imageUrl={member?.image}
+                    isActive={member?.isActive}
+                    size={isCollapsed ? "sm" : "md"}
+                  />
+                  {!isCollapsed && (
+                    <div className="flex-1 min-w-0 ml-3">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium truncate max-w-[120px]">
+                          {member?.name}
                         </span>
-                      )}
+                        {lastMessage && (
+                          <span className="text-xs text-muted-foreground whitespace-nowrap">
+                            <ClientOnlyDateFormatter
+                              dateString={lastMessage.createdAt}
+                            />
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-sm text-muted-foreground truncate mt-1 flex items-center gap-1">
+                        {lastMessage ? (
+                          <>
+                            {lastMessage.sender._id === currentUser._id && (
+                              <span className="text-primary">You : </span>
+                            )}
+                            {lastMessage.content ? (
+                              lastMessage.content
+                            ) : (
+                              <Paperclip className="mt-2" size={15} />
+                            )}
+                          </>
+                        ) : (
+                          <span className="italic">No messages yet</span>
+                        )}
+                      </div>
                     </div>
-                    <div className="text-sm text-muted-foreground truncate mt-1 flex items-center gap-1">
-                      {lastMessage ? (
-                        <>
-                          {lastMessage.sender._id === currentUser._id && (
-                            <span className="text-primary">You : </span>
-                          )}
-                          {lastMessage.content ? (
-                            lastMessage.content
-                          ) : (
-                            <Paperclip className="mt-2" size={15} />
-                          )}
-                        </>
-                      ) : (
-                        <span className="italic">No messages yet</span>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </Link>
-          </SidebarMenuItem>
-        ))}
+                  )}
+                </div>
+              </Link>
+            </SidebarMenuItem>
+          ))}
       </SidebarMenu>
     );
   };
@@ -247,30 +253,68 @@ export function AppSidebar({ isCollapsed, toggleSideBar }: AppSidebarProps) {
           </TooltipContent>
         </Tooltip>
         {!isCollapsed && (
-          <span className="font-medium text-sm">{currentUser.username}</span>
+          <Link
+            className="cursor-pointer hover:text-foreground/70"
+            href={`${paths.profile}/${currentUser._id}`}
+          >
+            <span className="font-medium text-sm">{currentUser.username}</span>
+          </Link>
         )}
       </div>
       <div
-        className={`flex flex-col ${
-          !isCollapsed ? "md:flex-row" : "md:flex-col"
+        className={`flex flex-row ${
+          !isCollapsed ? "md:flex-row" : " md:flex-col" //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         } gap-2`}
       >
-        {[
-          { href: paths.friends, icon: Users, label: "Friends" },
-          { href: paths.chat, icon: Settings, label: "Settings" },
-        ].map(({ href, icon: Icon, label }) => (
-          <Tooltip key={label}>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" asChild>
-                <Link href={href}>
-                  <Icon className="h-5 w-5" />
-                  <span className="sr-only">{label}</span>
-                </Link>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" asChild>
+              <Link href={paths.friends}>
+                <Users className="h-5 w-5" />
+                <span className="sr-only">Friends</span>
+              </Link>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right">Friends</TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Dropdown
+              title="Settings"
+              items={[
+                {
+                  title: "Edit My Info",
+                  content: (
+                    <Link className="w-full" href={paths.editProfile}>
+                      Edit Profile
+                    </Link>
+                  ),
+                },
+                {
+                  title: "Sign Out",
+                  content: (
+                    <form action={signOut}>
+                      <button
+                        type="submit"
+                        className="flex items-center gap-2 cursor-pointer w-full"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span className="text-sm leading-none">Sign Out</span>
+                      </button>
+                    </form>
+                  ),
+                },
+              ]}
+            >
+              <Button className="cursor-pointer" variant="ghost" size="icon">
+                <Settings className="h-5 w-5" />
+                <span className="sr-only">Settings</span>
               </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">{label}</TooltipContent>
-          </Tooltip>
-        ))}
+            </Dropdown>
+          </TooltipTrigger>
+          <TooltipContent side="right">Settings</TooltipContent>
+        </Tooltip>
       </div>
     </div>
   );
