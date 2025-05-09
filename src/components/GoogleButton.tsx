@@ -3,14 +3,17 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { redirect } from "next/navigation";
 
 const onSuccessHandler = async ({ credential }: CredentialResponse) => {
-  const response = await fetch("http://localhost:8080/api/auth/google", {
-    method: "POST",
-    body: JSON.stringify({ idToken: credential }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`,
+    {
+      method: "POST",
+      body: JSON.stringify({ idToken: credential }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
   const data = await response.json();
   console.log(data);
   redirect("/");
@@ -33,8 +36,8 @@ const GoogleAuth = ({ text }: GoogleAuthProps) => {
       onError={onErrorHandler}
       size="large"
       logo_alignment="left"
-      width="100%"
-      />
+      ux_mode="popup"
+    />
   );
 };
 

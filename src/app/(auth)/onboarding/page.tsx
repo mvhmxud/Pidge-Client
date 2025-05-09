@@ -1,5 +1,4 @@
 import { OnBoardingForm } from "@/components/auth/onboarding-form";
-import UserProfile from "@/components/userProfile";
 import { getSession } from "@/lib/utils/getSession";
 import { paths } from "@/lib/utils/paths";
 import { redirect } from "next/navigation";

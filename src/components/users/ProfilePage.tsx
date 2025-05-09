@@ -5,7 +5,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import BackButton from "../Common/BackButton";
 import Avatar from "../Common/Avatar";

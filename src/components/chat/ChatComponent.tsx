@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
 import { Message, MessageProps } from "../message/Message";
@@ -58,7 +58,7 @@ const ChatComponent = ({
     });
 
     socket.on("message", (data) => {
-      console.log(data);
+      console.log("new Message");
       handleNewMessage(data, selectedChatId as string);
     });
 
@@ -105,7 +105,7 @@ const ChatComponent = ({
         <ScrollArea className="h-full px-6 py-4 space-y-4 flex flex-col">
           {Array.isArray(MessagesArray) && MessagesArray.length > 0 ? (
             <div className="flex flex-col space-y-4">
-              {MessagesArray.map((message, idx) => (
+              {MessagesArray.map((message) => (
                 <Message
                   onReactionClick={handleReactionClick}
                   content={message.content}

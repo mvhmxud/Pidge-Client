@@ -1,11 +1,11 @@
-import axios, { AxiosError, InternalAxiosRequestConfig }  from "axios";
-import { paths } from "./utils/paths";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL, 
-  withCredentials: true, 
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
+    "Access-Control-Allow-Credentials": "true",
   },
 });
 
@@ -15,7 +15,6 @@ let failedRequests: Array<{
 }> = [];
 
 let isRefreshing = false;
-
 
 api.interceptors.response.use(
   (response) => response,
@@ -45,14 +44,14 @@ api.interceptors.response.use(
       try {
         // Attempt to refresh tokens
         await api.post("/api/auth/refresh-token");
-        
+
         // Retry the original request
         const retryResponse = await api(originalRequest);
-        
+
         // Process any queued requests
         failedRequests.forEach((prom) => prom.resolve(api(originalRequest)));
         failedRequests = [];
-        
+
         return retryResponse;
       } catch (refreshError) {
         // Clear queue and redirect to login if refresh fails
@@ -64,10 +63,9 @@ api.interceptors.response.use(
         isRefreshing = false;
       }
     }
-    console.log('refreshed throw axios interceptor ')
+    console.log("refreshed throw axios interceptor ");
     return Promise.reject(error);
   }
 );
 
-  
 export default api;

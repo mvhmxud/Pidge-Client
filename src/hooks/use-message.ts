@@ -17,7 +17,6 @@ interface UseMessageProps {
 }
 
 export const useMessage = ({ chatId, currentUserId }: UseMessageProps) => {
-  const {selectedChat} = useChat()
   const socket = useSocket();
   const { setMessages, messages } = useChat();
   const [files, setFiles] = useState<File[]>([]);

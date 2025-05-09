@@ -1,4 +1,3 @@
-
 export const paths = {
   home: "/",
   login: "/sign-in",
@@ -6,4 +5,6 @@ export const paths = {
   onboarding: "/onboarding",
   chat: "/chat",
   friends: "/friends",
+  profile: "/profile",
+  editProfile: "/edit-profile",
 };

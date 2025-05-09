@@ -22,6 +22,7 @@ export const onboardingSchema = z.object({
   bio: z.string().min(3).optional(),
 });
 
+
 export const sendMessageSchema = z
   .object({
     message: z.string().optional(),

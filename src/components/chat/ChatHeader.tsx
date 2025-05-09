@@ -4,6 +4,8 @@ import { Menu } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 import Avatar from "../Common/Avatar";
 import type { User } from "@/types/types";
+import Link from "next/link";
+import { paths } from "@/lib/utils/paths";
 
 interface ChatHeaderProps {
   user: Omit<User, "bio" | "lastActive" | "__v"> | null;
@@ -26,9 +28,11 @@ const ChatHeader = ({ user }: ChatHeaderProps) => {
         {/* Text info */}
         <div className="flex flex-col items-start gap-1">
           <div className="flex items-center gap-2">
-            <h1 className="font-bold text-lg md:text-2xl text-foreground tracking-tight">
-              {user?.name}
-            </h1>
+            <Link className="cursor-pointer group " href={`${paths.profile}/${user?._id}`}>
+              <h1 className="font-bold text-lg md:text-2xl group-hover:text-foreground/70 text-foreground tracking-tight">
+                {user?.name}
+              </h1>
+            </Link>
           </div>
           <span className="px-2 py-0.5 rounded bg-muted text-muted-foreground shadow text-xs md:text-sm font-medium">
             @{user?.username}

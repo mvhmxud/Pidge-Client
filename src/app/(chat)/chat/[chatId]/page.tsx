@@ -2,9 +2,9 @@ import ChatComponent from "@/components/chat/ChatComponent";
 export const dynamic = "force-dynamic";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     chatId: string;
-  };
+  }>;
 }
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -13,7 +13,7 @@ const page = async ({ params }: PageProps) => {
   const { chatId } = await params;
   const chatData = await fetchChatData(chatId);
   if (!chatData) notFound();
-   return (
+  return (
     <ChatComponent
       chatId={chatId}
       selectedChatId={chatData.chatInfo._id}
@@ -34,6 +34,7 @@ async function fetchChatData(chatId: string) {
       `${process.env.PUBLIC_API_URL}/api/chats/${chatId}/messages`,
       {
         method: "GET",
+        credentials : "include",
         headers: {
           "Content-Type": "application/json",
           Cookie: `token=${token}`, // manually send it

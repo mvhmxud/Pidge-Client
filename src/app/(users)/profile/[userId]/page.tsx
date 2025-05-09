@@ -5,9 +5,9 @@ import { cookies } from "next/headers";
 import { getSession } from "@/lib/utils/getSession";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     userId: string;
-  };
+  }>;
 }
 
 const getUser = async (userId: string) => {
@@ -38,8 +38,10 @@ const getUser = async (userId: string) => {
   };
 };
 
+export const revalidate = 0;
+
 const Page = async ({ params }: PageProps) => {
-  const { userId } = params;
+  const { userId } = await params;
   const session = await getSession();
 
   if (!session) redirect(paths.login);

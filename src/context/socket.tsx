@@ -1,4 +1,3 @@
-// context/SocketContext.tsx
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -30,6 +29,7 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
     socketInstance.on("connect", () => {
       console.log("✅ Socket connected:", socketInstance.id);
       socketInstance.emit("user-connect", { userId: session?.userId });
+      
     });
 
     return () => {

@@ -2,7 +2,7 @@
 import React from "react";
 import { AppSidebar } from "@/components/chat/SideBar";
 import { useSidebar } from "@/components/ui/sidebar";
-import { ChatProvider, useChat } from "@/context/chat";
+import { ChatProvider } from "@/context/chat";
 import { SocketProvider } from "@/context/socket";
 
 const ChatLayout = ({
@@ -14,9 +14,6 @@ const ChatLayout = ({
 
   const isCollapsed = state === "collapsed";
 
-  
-
-
   return (
     <SocketProvider>
       <ChatProvider>
@@ -24,6 +21,7 @@ const ChatLayout = ({
           {/* SideBar */}
           <div className={`hidden md:block`}>
             <AppSidebar
+              isMobile={openMobile}
               toggleSideBar={toggleSidebar}
               isCollapsed={isCollapsed}
             />
@@ -33,6 +31,7 @@ const ChatLayout = ({
             {openMobile && (
               <div className="w-full">
                 <AppSidebar
+                  isMobile={openMobile}
                   toggleSideBar={toggleSidebar}
                   isCollapsed={isCollapsed}
                 />

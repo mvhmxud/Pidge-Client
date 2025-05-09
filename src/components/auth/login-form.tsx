@@ -28,7 +28,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { useAuth } from "@/context/auth";
 import GoogleAuth from "../GoogleButton";
 import { Spinner } from "../ui/spinner";
 import { useRouter } from "next/navigation";
@@ -50,7 +49,7 @@ export function LoginForm({
   const loginMutation = useMutation({
     mutationFn: (values: z.infer<typeof formSchema>) =>
       api.post("/api/auth/login", values, { withCredentials: true }),
-    onSuccess: (res) => {
+    onSuccess: () => {
       toast.success("Login successful, redirecting...", {
         duration: 2000,
       });
@@ -138,7 +137,7 @@ export function LoginForm({
             </form>
           </Form>
           <p className="text-sm text-center mt-2">
-            Don't have an account? <Link className="hover:underline" href={paths.register}>Sign up</Link>
+            Don&apos;t have an account? <Link className="hover:underline" href={paths.register}>Sign up</Link>
           </p>
         </CardContent>
       </Card>

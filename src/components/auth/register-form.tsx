@@ -26,7 +26,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { useAuth } from "@/context/auth";
 import GoogleAuth from "../GoogleButton";
 import { Spinner } from "../ui/spinner";
 import { useRouter } from "next/navigation";
@@ -53,7 +52,7 @@ export function RegisterForm({
   const registerMutation = useMutation({
     mutationFn: (values: z.infer<typeof formSchema>) =>
       api.post("/api/auth/signup", values, { withCredentials: true }),
-    onSuccess: (res) => {
+    onSuccess: () => {
       toast.success("Sign up successful, redirecting...", {
         duration: 2000,
       });
