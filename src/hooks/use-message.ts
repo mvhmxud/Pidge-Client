@@ -213,14 +213,6 @@ export const useMessage = ({ chatId, currentUserId }: UseMessageProps) => {
               },
             }
           );
-
-          setMessages((prev) =>
-            prev.map((message) =>
-              message._id === newMessage._id
-                ? { ...message, pending: false }
-                : message
-            )
-          );
           socket?.emit("message", sentMessage.data.messageData);
         } catch (error) {
           setMessages((prev) =>
@@ -265,6 +257,6 @@ export const useMessage = ({ chatId, currentUserId }: UseMessageProps) => {
     onSubmit,
     onError,
     handleKeyDown,
-    handleReactionClick
+    handleReactionClick,
   };
 };
