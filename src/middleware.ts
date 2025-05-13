@@ -1,32 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRefreshToken } from "./lib/utils/getRefreshToken";
-// import { isTokenExpired } from "./lib/utils/isTokenExpired";
 
 export default async function middleware(req: NextRequest) {
-  // const session = req.cookies.get("token");
   const refreshToken = req.cookies.get("refreshToken");
-  console.log("refresh token", refreshToken);
+
   if (!refreshToken) return;
-  // const isExpired = session?.value ? await isTokenExpired(session.value) : false;
+
   try {
-    const { token, refreshToken: newRefreshToken } = await getRefreshToken(
-      refreshToken.value
-    );
+    const { token, refreshToken: newRefreshToken } = await getRefreshToken(refreshToken.value);
 
     const response = NextResponse.next();
-    response.cookies.set({
-      name: "token",
-      value: token,
+
+    // Set token cookie
+    response.cookies.set("token", token, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      domain: process.env.COOKIES_DOMAIN,
+      path: "/",
     });
-    response.cookies.set({
-      name: "refreshToken",
-      value: newRefreshToken,
+
+    // Set refreshToken cookie
+    response.cookies.set("refreshToken", newRefreshToken, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      domain: process.env.COOKIES_DOMAIN,
+      path: "/",
     });
+
     return response;
   } catch (error) {
-    console.log(error);
+    console.error("Middleware error:", error);
+    return;
   }
 }
 

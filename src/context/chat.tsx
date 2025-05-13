@@ -91,10 +91,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
           (m) =>
             normalize(m.content) === normalize(data.message.content) &&
             m.sender._id === data.message.sender._id &&
-            Math.abs(
-              new Date(m.createdAt).getTime() -
-                new Date(data.message.createdAt).getTime()
-            ) < 1000
+            m.pending === true
         );
         if (optimisticIndex !== -1) {
           const newMessages = [...prev];
